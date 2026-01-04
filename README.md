@@ -52,10 +52,14 @@ These steps ensure cleaner, more semantically meaningful text for embedding and 
 
 ## 📈 Key Findings
 
-* A significant portion of complaints lack narratives and are unsuitable for semantic search.
-* Narrative lengths vary widely, from very short descriptions to detailed multi-paragraph complaints.
-* Extremely short narratives fall below the 5th percentile and provide limited contextual value.
-* The observed distribution of long narratives validates the need for chunking in subsequent tasks.
+Here is a **clear, high-impact summary in a maximum of 5 bullet points**, suitable for a README, report, or slide deck:
+
+* The CFPB dataset contains approximately **9.6 million complaints (2011–2025)**, with **credit-related issues dominating**, particularly *Credit reporting or other personal consumer reports*, which account for over **50%** of all submissions.
+* Complaints are primarily submitted via **web-based channels**, with **Florida and California** recording the highest volumes, while only **~31%** of complaints include a consumer narrative, limiting qualitative analysis.
+* Complaint narratives vary widely in length, with a **median of 100–150 words**, but over **20% are shorter than 20 words**, often consisting of boilerplate or incomplete text unsuitable for semantic retrieval.
+* Frequently reported issues include **incorrect credit report information**, **account management problems**, and **transaction-related disputes**, indicating recurring challenges in financial services transparency.
+* For RAG readiness, the data was filtered to **Credit Cards, Personal Loans, Savings Accounts, and Money Transfers**, cleaned through text normalization, and short narratives removed, resulting in a **high-quality dataset saved as `filtered_complaints.csv`** for downstream embedding and retrieval tasks.
+
 
 ---
 
@@ -68,14 +72,6 @@ These steps ensure cleaner, more semantically meaningful text for embedding and 
 * **Cleaned Dataset**:
   `data/filtered_complaints.csv`
   A filtered and cleaned dataset ready for embedding, vector indexing, and RAG development.
-
----
-
-The exploratory data analysis (EDA) of the CFPB consumer complaints dataset revealed several important insights into complaint patterns, data quality, and narrative usability. The dataset contains approximately 9.6 million complaints spanning from 2011 to 2025, with credit-related issues dominating the submissions. The product category “Credit reporting or other personal consumer reports” alone accounts for nearly 4.8 million complaints, representing over 50% of the total volume, with major credit bureaus such as Equifax frequently cited. Most complaints were submitted via web-based channels, and Florida and California emerged as the states with the highest complaint volumes. Despite the large dataset size, only about 31% of complaints include a consumer complaint narrative, highlighting a substantial gap in qualitative, context-rich data.
-
-A deeper analysis of narrative quality revealed significant variability in text length and content. Among complaints with narratives, word counts ranged widely, with a median length of approximately 100–150 words. However, more than 20% of narratives contained fewer than 20 words, often consisting of boilerplate phrases or incomplete descriptions. Such short narratives provide limited semantic value and are unsuitable for embedding-based retrieval systems. Commonly reported issues included incorrect information on credit reports, account management problems, and transaction-related disputes, pointing to recurring systemic challenges in financial services transparency and consumer protection.
-
-To prepare a high-quality dataset suitable for Retrieval-Augmented Generation (RAG) and advanced analytics, the data was filtered to four target product categories: Credit Cards, Personal Loans, Savings Accounts, and Money Transfers. Complaints without narratives were removed, and additional text preprocessing steps were applied, including boilerplate removal, lowercasing, special character stripping, and whitespace normalization. Narratives shorter than 20 words were excluded based on percentile analysis. These steps resulted in a refined, narrative-rich dataset saved as filtered_complaints.csv, ready for downstream tasks such as embedding, semantic retrieval, topic modeling, and sentiment analysis.
 
 ---
 
