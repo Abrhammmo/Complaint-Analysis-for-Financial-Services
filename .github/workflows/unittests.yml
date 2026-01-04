@@ -1,0 +1,85 @@
+name: Unit Tests & Data Validation
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ---------------------------
+      # Checkout repository
+      # ---------------------------
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ---------------------------
+      # Set up Python
+      # ---------------------------
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # ---------------------------
+      # Install dependencies
+      # ---------------------------
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # ---------------------------
+      # Basic project structure checks
+      # ---------------------------
+      - name: Verify project structure
+        run: |
+          test -d data || (echo "Missing data directory" && exit 1)
+          test -d notebooks || (echo "Missing notebooks directory" && exit 1)
+          test -d src || (echo "Missing src directory" && exit 1)
+
+      # ---------------------------
+      # Validate cleaned dataset exists
+      # ---------------------------
+      - name: Check filtered dataset
+        run: |
+          test -f data/filtered_complaints.csv || \
+          (echo "filtered_complaints.csv not found. Run Task 1 preprocessing." && exit 1)
+
+      # ---------------------------
+      # Lightweight data validation
+      # ---------------------------
+      - name: Validate filtered dataset schema
+        run: |
+          python - <<EOF
+          import pandas as pd
+
+          df = pd.read_csv("data/filtered_complaints.csv")
+
+          required_columns = [
+              "Product",
+              "Consumer complaint narrative",
+              "cleaned_narrative"
+          ]
+
+          for col in required_columns:
+              assert col in df.columns, f"Missing required column: {col}"
+
+          assert len(df) > 0, "Filtered dataset is empty"
+
+          assert df["cleaned_narrative"].isna().sum() == 0, \
+              "Cleaned narrative contains null values"
+
+          print("Dataset validation passed successfully.")
+          EOF
+
+      # ---------------------------
+      # Future-ready placeholder
+      # ---------------------------
+      - name: Placeholder for future tests
+        run: |
+          echo "Task 1 validation complete. Ready for Task 2 (Embeddings & Vector Store)."
