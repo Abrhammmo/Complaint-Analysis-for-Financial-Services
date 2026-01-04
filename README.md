@@ -75,11 +75,133 @@ Here is a **clear, high-impact summary in a maximum of 5 bullet points**, suitab
 
 ---
 
-## 🚀 Next Steps
+Here is a **clear, professional, and reviewer-ready README section for Task-2**, written to align perfectly with your architecture, constraints, and engineering decisions.
 
-The cleaned dataset produced in Task 1 will be used in:
+You can paste this directly into your main `README.md` or a `notebooks/README.md` section.
 
-* **Task 2**: Text chunking, embedding generation, and vector store indexing
+---
+
+# 🧩 Task 2: Text Chunking, Embedding, and Vector Store Indexing
+
+## 📌 Objective
+
+The objective of Task 2 is to transform cleaned customer complaint narratives into a format suitable for **efficient semantic search**. This task prepares the foundation for a Retrieval-Augmented Generation (RAG) system by converting unstructured complaint text into vector embeddings and indexing them for fast similarity retrieval.
+
+Due to hardware and time constraints, embeddings are generated on a **stratified sample** of the dataset while maintaining proportional representation across financial product categories.
+
+---
+
+## 📊 Stratified Sampling Strategy
+
+To ensure balanced representation across complaint types, a **stratified sampling approach** was applied to the cleaned dataset produced in Task 1.
+
+* Sample size: **~12,000 complaints**
+* Stratification column: **Product category**
+* Random seed fixed for reproducibility
+
+This strategy guarantees that all target product categories (Credit Cards, Personal Loans, Savings Accounts, and Money Transfers) contribute proportionally to the embedding space, preventing dominance by high-volume categories.
+
+The sampled dataset is persisted as:
+
+```
+data/processed/sampled_complaints.csv
+```
+
+---
+
+## ✂️ Text Chunking Strategy
+
+Customer complaint narratives vary significantly in length and structure. Embedding long narratives as a single vector can degrade retrieval performance. To address this, each narrative is split into overlapping text chunks.
+
+* Chunking method: **Recursive character-based splitting**
+* Chunk size: **500 characters**
+* Chunk overlap: **50 characters**
+
+This configuration balances semantic coherence with retrieval granularity while preserving contextual continuity across chunks.
+
+---
+
+## 🧠 Embedding Model Selection
+
+The **`sentence-transformers/all-MiniLM-L6-v2`** model was selected for generating vector embeddings.
+
+**Justification:**
+
+* Produces high-quality sentence-level embeddings
+* Compact (384-dimensional vectors)
+* Fast inference suitable for CPU-only environments
+* Widely adopted and well-validated for semantic search tasks
+
+All embeddings are L2-normalized to enable cosine similarity via inner product search.
+
+Generated embeddings are saved as:
+
+```
+data/processed/embeddings.npy
+```
+
+---
+
+## 📦 Vector Store Indexing (FAISS)
+
+To support fast and scalable similarity search, embeddings are indexed using **FAISS (Facebook AI Similarity Search)**.
+
+* Index type: **IndexFlatIP (Inner Product)**
+* Similarity metric: **Cosine similarity (via normalized vectors)**
+* Offline, lightweight, and hardware-efficient
+
+Metadata for each text chunk (complaint ID, product category, chunk index) is stored alongside the FAISS index to enable traceability and filtered retrieval.
+
+Persisted artifacts:
+
+```
+data/processed/faiss_index/
+├── index.faiss
+└── index_meta.json
+```
+
+---
+
+## 🏗 Modular & Reproducible Design
+
+All core logic for Task 2 is implemented in the `src/` directory to promote modularity, testability, and reuse:
+
+* Sampling
+* Chunking
+* Embedding
+* FAISS indexing
+* Validation utilities
+
+A centralized `config.py` module defines all hyperparameters, paths, and random seeds, ensuring **deterministic and reproducible execution**.
+
+The accompanying Jupyter notebook serves only as an orchestration layer, invoking well-defined functions from `src/` and documenting experimental decisions.
+
+---
+
+## 📁 Outputs Summary
+
+After completing Task 2, the following artifacts are produced:
+
+```
+data/processed/
+├── sampled_complaints.csv
+├── embeddings.npy
+└── faiss_index/
+    ├── index.faiss
+    └── index_meta.json
+```
+
+These outputs form the core semantic retrieval layer and will be used directly in **Task 3** to build and evaluate the RAG pipeline.
+
+---
+
+## ✅ Outcome
+
+Task 2 establishes a robust, scalable, and reproducible semantic search foundation. Complaint narratives are now efficiently chunked, embedded, and indexed, enabling low-latency retrieval of relevant customer feedback for downstream question-answering and insight generation.
+
+---
+
+## Next steps
 * **Task 3**: Building and evaluating the RAG core logic
 * **Task 4**: Developing an interactive complaint-answering interface
 
