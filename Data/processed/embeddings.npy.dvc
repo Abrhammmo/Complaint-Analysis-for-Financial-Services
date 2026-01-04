@@ -1,0 +1,5 @@
+outs:
+- md5: f6c770f1de278f70b1312f4db52c3985
+  size: 62595200
+  hash: md5
+  path: embeddings.npy
