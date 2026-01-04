@@ -75,12 +75,6 @@ Here is a **clear, high-impact summary in a maximum of 5 bullet points**, suitab
 
 ---
 
-Here is a **clear, professional, and reviewer-ready README section for Task-2**, written to align perfectly with your architecture, constraints, and engineering decisions.
-
-You can paste this directly into your main `README.md` or a `notebooks/README.md` section.
-
----
-
 # 🧩 Task 2: Text Chunking, Embedding, and Vector Store Indexing
 
 ## 📌 Objective
