@@ -9,3 +9,4 @@ def ensure_dir(path):
 def validate_narratives(df, text_col):
     if df[text_col].isnull().any():
         raise ValueError("Null narratives detected")
+

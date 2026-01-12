@@ -12,3 +12,4 @@ def embed_texts(texts, model_name):
         normalize_embeddings=True
     )
     return np.array(embeddings, dtype="float32")
+

@@ -20,3 +20,4 @@ def stratified_sample(
 
     for train_idx, _ in splitter.split(df, df[label_col]):
         return df.iloc[train_idx].reset_index(drop=True)
+

@@ -16,3 +16,4 @@ class Config:
     # Paths
     PROCESSED_DIR = "../data/processed/"
     FAISS_DIR = "../data/processed/faiss_index"
+    

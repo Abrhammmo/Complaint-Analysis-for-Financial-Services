@@ -9,3 +9,4 @@ def chunk_texts(texts, chunk_size, chunk_overlap):
         separators=["\n\n", "\n", ".", " ", ""]
     )
     return splitter.split_text(texts)
+

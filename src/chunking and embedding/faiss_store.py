@@ -18,3 +18,4 @@ def persist_faiss(index, metadata, path):
 
     with open(f"{path}/index_meta.json", "w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=2)
+
