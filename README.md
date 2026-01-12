@@ -195,7 +195,182 @@ Task 2 establishes a robust, scalable, and reproducible semantic search foundati
 
 ---
 
-## Next steps
-* **Task 3**: Building and evaluating the RAG core logic
-* **Task 4**: Developing an interactive complaint-answering interface
+Below is a **clean, professional, and submission-ready README** covering **Task 3 and Task 4**, written to match **your actual implementation, constraints, and design choices**.
+You can paste this **directly** into your project `README.md` or a `tasks/README.md`.
+
+---
+
+# 📌 Task 3 & Task 4 – RAG Core Logic, Evaluation & Interactive Interface
+
+## Overview
+
+Tasks 3 and 4 focus on transforming the preprocessed complaint data and vector embeddings into a **fully functional Retrieval-Augmented Generation (RAG) system** with an **interactive user interface**. The goal is to allow non-technical stakeholders at **CrediTrust Financial** to ask natural-language questions about customer complaints and receive **concise, evidence-backed answers** grounded in real customer narratives.
+
+Due to computational constraints, the system operates on a **stratified, representative sample** created in Task 2, while preserving the same embedding model, chunking strategy, and retrieval logic as the full-scale dataset.
+
+---
+
+## ✅ Task 3: Building the RAG Core Logic & Evaluation
+
+### 🎯 Objective
+
+To design and implement a modular RAG pipeline that:
+
+* Retrieves the most relevant complaint narratives using vector similarity search
+* Generates grounded answers using an LLM
+* Enables qualitative evaluation of retrieval and generation quality
+
+---
+
+### 🏗️ Architecture & Design
+
+The RAG system is implemented in a **modular and reproducible manner**, with core logic placed under the `src/RAG/` directory and executed from a notebook.
+
+```
+src/RAG/
+├── embedder.py        # Loads sentence embedding model
+├── vector_store.py    # Loads FAISS index and performs similarity search
+├── prompt.py          # Prompt template definition
+├── generator.py       # Loads and runs the LLM
+├── pipeline.py        # End-to-end RAG pipeline orchestration
+```
+
+The **notebook** is used only as an orchestration layer to:
+
+* Load models and indexes
+* Run sample queries
+* Perform qualitative evaluation
+
+---
+
+### 🔍 Retriever Implementation
+
+* **Embedding model**: `sentence-transformers/all-MiniLM-L6-v2`
+* **Vector store**: FAISS (CPU)
+* **Search method**: cosine similarity
+* **Top-k retrieval**: `k = 5`
+* **Metadata support**: each retrieved chunk includes product category, issue, company, and complaint narrative
+
+Basic input validation ensures empty or invalid queries are safely handled.
+
+---
+
+### 🧠 Prompt Engineering
+
+A structured prompt template is used to enforce **grounded generation**:
+
+```
+You are a financial analyst assistant for CrediTrust.
+Use only the provided complaint excerpts to answer the question.
+If the context does not contain enough information, say so.
+
+Context:
+{context}
+
+Question:
+{question}
+
+Answer:
+```
+
+This design minimizes hallucination and ensures traceability between answers and source complaints.
+
+---
+
+### ✨ Generator Implementation
+
+* **LLM backend**: Hugging Face Transformers (CPU)
+* **Controlled generation**: max tokens and temperature tuned for concise answers
+* **Graceful fallback**: informative message returned if generation fails
+
+---
+
+### 📊 Qualitative Evaluation
+
+To evaluate system performance, **five representative business questions** were defined across product categories. For each query, the following were analyzed:
+
+* Generated answer quality
+* Relevance of retrieved complaint narratives
+* Faithfulness to source content
+
+An evaluation table was produced with the following columns:
+
+* Question
+* Generated Answer
+* Retrieved Sources (1–2 examples)
+* Quality Score (1–5)
+* Comments / Analysis
+
+This evaluation confirmed strong semantic retrieval and coherent, evidence-based answers, with minor limitations due to sample size.
+
+---
+
+## ✅ Task 4: Interactive Chat Interface
+
+### 🎯 Objective
+
+To build an intuitive, user-friendly web interface that enables **non-technical users** to interact with the RAG system in real time.
+
+---
+
+### 🖥️ Interface Implementation
+
+* **Framework**: Gradio
+* **Entry point**: `app.py`
+* **Execution**: `python app.py`
+
+---
+
+### 🔑 Core Features
+
+✔ Text input for user questions
+✔ “Ask” button to submit queries
+✔ Display area for AI-generated answers
+✔ Source transparency via retrieved complaint excerpts
+✔ “Clear” button to reset the interface
+
+Each answer is accompanied by **verifiable source snippets**, increasing trust and interpretability.
+
+---
+
+### 🔄 System Flow
+
+1. User enters a question in natural language
+2. Question is embedded using the same model as the complaint embeddings
+3. FAISS retrieves top-k relevant complaint chunks
+4. Retrieved context is injected into the prompt
+5. LLM generates a concise, grounded answer
+6. Answer and sources are displayed in the UI
+
+---
+
+## ⚙️ Reproducibility & Robustness
+
+* Fixed embedding model and retrieval parameters
+* Modular source code with clear separation of concerns
+* CPU-compatible implementation
+* Graceful error handling for empty inputs and runtime failures
+* Deterministic vector search behavior
+
+---
+
+## ⚠️ Limitations
+
+* Operates on a **stratified sample** rather than the full 464K-complaint dataset due to memory constraints
+* Generation quality depends on retrieved context richness
+* No persistent chat history (single-turn Q&A)
+
+---
+
+## 🚀 Outcome
+
+By the end of Tasks 3 and 4, the project delivers:
+
+* A working RAG pipeline
+* Transparent, evidence-based answers to complaint-related questions
+* A production-ready interactive interface suitable for internal teams at CrediTrust
+
+This foundation enables future scaling to the full dataset and deployment in real business workflows.
+
+
 
